@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>👋 ChatBot Thesis Assistant</title>
+  <style>
+    body {
+      background-color: #f5f5f0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #0a1c3c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+    }
+    header {
+      background-color: #0a1c3c;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      width: 100%;
+    }
+    .chat-container {
+      margin-top: 2rem;
+      width: 90%;
+      max-width: 700px;
+      background-color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .chat-box {
+      min-height: 250px;
+      max-height: 350px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 1rem;
+      white-space: pre-wrap;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>👋 ChatBot</h1>
+    <p>Welcome to my thesis presentation:<br><strong>“The Role of Emotional Intelligence, Sensitivity, and Empathy in Leadership.”</strong><br>Ask me anything about my thesis!</p>
+  </header>
+  <div class="chat-container">
+    <div class="chat-box" id="chatBox"></div>
+    <input type="text" id="userInput" placeholder="Type your question here..." />
+  </div>
+
+  <script>
+    const responses = {
+      "what is this thesis about": "This thesis explores how emotional intelligence, sensitivity, and empathy can enhance leadership in the hospitality industry, helping leaders balance professional success with personal responsibilities.",
+      "why did you choose this topic": "I chose it because of my passion for people-centered leadership and my direct experience in luxury hospitality, where emotional intelligence is vital.",
+      "what is emotional intelligence": "EI is the ability to recognize, understand, manage, and use emotions effectively in oneself and others.",
+      "what is transformational leadership": "A style that inspires and motivates employees through vision, empathy, and personal connection.",
+      "what is transactional leadership": "A style based on structured tasks and rewards or penalties.",
+      "how does ei affect team performance": "EI improves communication, trust, and motivation, leading to better results.",
+      "how can leaders use ai ethically": "By prioritizing transparency, fairness, and complementing—not replacing—human judgment.",
+      "what is marriott's takecare program": "A well-being initiative that supports employees physically, emotionally, and socially.",
+      "how is leadership evolving": "It's becoming more human-centric, valuing emotional intelligence and flexibility.",
+      "what did you learn at hotel arts barcelona": "How strong team dynamics and emotional leadership boost guest satisfaction.",
+      // Add more as needed from the 50 Q&A list
+    };
+
+    const chatBox = document.getElementById("chatBox");
+    const userInput = document.getElementById("userInput");
+
+    userInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        const question = userInput.value.trim().toLowerCase();
+        if (question) {
+          chatBox.innerHTML += `\nYou: ${userInput.value}`;
+          if (responses[question]) {
+            chatBox.innerHTML += `\nChatBot: ${responses[question]}`;
+          } else {
+            chatBox.innerHTML += `\nChatBot: I'm still learning! Try asking something related to emotional intelligence, leadership, or hospitality.`;
+          }
+          chatBox.scrollTop = chatBox.scrollHeight;
+          userInput.value = "";
+        }
+      }
+    });
+  </script>
+</body>
+</html>

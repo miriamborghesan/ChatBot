@@ -39,12 +39,29 @@
       margin-bottom: 1rem;
       white-space: pre-wrap;
     }
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
     input[type="text"] {
-      width: 100%;
+      flex: 1;
       padding: 0.75rem;
       font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 5px;
+    }
+    button {
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: none;
+      background-color: #0a1c3c;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #133d7a;
     }
   </style>
 </head>
@@ -55,81 +72,77 @@
   </header>
   <div class="chat-container">
     <div class="chat-box" id="chatBox"></div>
-    <input type="text" id="userInput" placeholder="Type your question here..." />
+    <div class="controls">
+      <input type="text" id="userInput" placeholder="Type your question here..." />
+      <button onclick="sendMessage()">Send</button>
+      <button onclick="startVoiceInput()">🎤</button>
+      <button onclick="resetChat()">Reset</button>
+    </div>
   </div>
 
- <script>
-  const responses = {
-    "what is this thesis about": "This thesis explores how emotional intelligence, sensitivity, and empathy can enhance leadership in the hospitality industry, helping leaders balance professional success with personal responsibilities.",
-    "why did you choose this topic": "I chose this topic because I am passionate about people-centered leadership and I wanted to explore how emotional intelligence and empathy can be powerful tools in the hospitality industry.",
-    "what is emotional intelligence": "Emotional intelligence is the ability to recognize, understand, manage, and influence emotions in oneself and others.",
-    "what are the key components of ei": "The key components are self-awareness, self-regulation, motivation, empathy, and social skills.",
-    "how is emotional intelligence developed": "It is developed through reflection, feedback, mindfulness, emotional regulation training, and social interaction.",
-    "what is sensitivity in leadership": "Sensitivity in leadership means being aware of others' emotions and perspectives, and responding with care and respect.",
-    "what is empathy in leadership": "Empathy is the ability to understand and share the feelings of others, which helps build trust and connection in teams.",
-    "how does leadership affect employee satisfaction": "Empathetic and emotionally intelligent leadership boosts morale, trust, and job satisfaction.",
-    "how can leaders balance work and private life": "By setting boundaries, delegating, managing time well, and fostering a supportive culture.",
-    "why is this topic relevant in hospitality": "Because hospitality is a people-centered industry that requires high emotional engagement and human connection.",
-    "how does ei relate to customer service": "EI allows staff to handle guest needs sensitively, resolve conflicts, and create memorable experiences.",
-    "how does hospitality challenge private life": "Irregular schedules, emotional labor, and guest demands can make work-life balance difficult.",
-    "what is transformational leadership": "A leadership style that inspires and motivates through vision, empathy, and personal example.",
-    "what is transactional leadership": "A leadership style focused on rewards, penalties, and clear structures.",
-    "how does transformational leadership support ei": "It emphasizes emotional connection, vision, and intrinsic motivation.",
-    "what is the big five model": "A personality framework including openness, conscientiousness, extraversion, agreeableness, and neuroticism.",
-    "what is the DISC model": "A personality model based on Dominance, Influence, Steadiness, and Conscientiousness.",
-    "what is attribution theory": "A theory about how people explain behaviors and outcomes, often used to understand motivation and leadership perceptions.",
-    "what is the birkman method": "A personality and behavior assessment used to enhance team dynamics and leadership development.",
-    "how does ai impact leadership": "AI can support decision-making, improve efficiency, and allow leaders to focus more on human interactions.",
-    "what is ethical ai use": "Ethical AI use respects privacy, fairness, transparency, and complements—not replaces—human roles.",
-    "how does organizational culture affect leadership": "Culture shapes values, expectations, and behaviors, influencing how leadership is expressed and received.",
-    "what is marriott's takecare program": "It's a well-being initiative supporting employees physically, emotionally, and socially to foster engagement and retention.",
-    "how did arne sorenson lead during covid": "With empathy and transparency—he personally addressed staff, acknowledged challenges, and maintained a human connection.",
-    "what is emotionally intelligent hrm": "HR practices that value emotional intelligence in recruitment, training, and culture development.",
-    "how does hrm affect job satisfaction": "Supportive HRM policies improve engagement, motivation, and employee retention.",
-    "how do leaders affect organizational performance": "Through vision, motivation, and emotional engagement, leaders directly influence productivity and morale.",
-    "what is the connection between ei and performance": "High EI leads to better communication, collaboration, and decision-making, boosting overall performance.",
-    "how did you apply this during your internships": "I practiced empathy, teamwork, and self-awareness daily—especially in demanding luxury hospitality environments.",
-    "where did you intern": "At The Gritti Palace in Venice, Hotel Arts Barcelona, and Bvlgari Hotel Roma—all luxury Marriott properties.",
-    "what was special about the gritti palace": "Its elegance, history, and high guest expectations made emotional intelligence crucial.",
-    "what did you learn in barcelona": "Strong team spirit and emotionally intelligent leadership enhanced both staff and guest experiences.",
-    "how was bvlgari hotel roma": "An exclusive and detail-oriented setting that tested my ability to manage guest expectations with empathy.",
-    "how do luxury hotels use ei": "To personalize service, anticipate needs, resolve issues, and create emotional connections with guests.",
-    "how does empathy help in conflicts": "It de-escalates tension, builds understanding, and fosters cooperation.",
-    "what is mindful leadership": "A leadership style that emphasizes presence, intentionality, and awareness of oneself and others.",
-    "how can leaders build trust": "By being transparent, consistent, empathetic, and responsive.",
-    "how can ai support hotel staff": "By handling repetitive tasks, freeing up time for human interactions.",
-    "what are the risks of ai in hospitality": "Job displacement, depersonalization, and ethical concerns if not used thoughtfully.",
-    "how can empathy be trained": "Through reflection, storytelling, role-play, feedback, and exposure to diverse perspectives.",
-    "what is emotional labor": "The effort required to manage emotions during interactions, common in hospitality roles.",
-    "how can leaders prevent burnout": "By recognizing stress signs, encouraging balance, and fostering a supportive environment.",
-    "how can teams use ei collectively": "By being aware of group dynamics, encouraging feedback, and aligning emotionally.",
-    "what is psychological safety": "An environment where people feel safe to express themselves without fear of negative consequences.",
-    "what are future leadership trends": "Greater empathy, flexibility, technological integration, and purpose-driven leadership.",
-    "what is hybrid leadership": "A model blending in-person and remote leadership with digital tools and human connection.",
-    "how do generational values affect leadership": "Different generations value flexibility, purpose, feedback, and emotional authenticity differently.",
-    "what is sustainable leadership": "Leadership that balances long-term performance with people’s well-being and ethical responsibility.",
-    "how will your thesis help you in your career": "It sharpened my understanding of human dynamics, team leadership, and the evolving needs of modern organizations.",
-    "what makes you passionate about this": "Because I believe that empathy and emotional intelligence are essential for meaningful, impactful leadership."
-  };
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const question = input.value.trim();
+      if (!question) return;
 
-  const chatBox = document.getElementById("chatBox");
-  const userInput = document.getElementById("userInput");
+      const chatBox = document.getElementById("chatBox");
+      const userMessage = document.createElement("div");
+      userMessage.textContent = `You: ${question}`;
+      userMessage.style.fontWeight = "bold";
+      userMessage.style.margin = "6px 0";
+      chatBox.appendChild(userMessage);
 
-  userInput.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      const question = userInput.value.trim().toLowerCase();
-      if (question) {
-        chatBox.innerHTML += `\nYou: ${userInput.value}`;
-        if (responses[question]) {
-          chatBox.innerHTML += `\nChatBot: ${responses[question]}`;
-        } else {
-          chatBox.innerHTML += `\nChatBot: I'm still learning! Try asking something related to emotional intelligence, leadership, or hospitality.`;
-        }
-        chatBox.scrollTop = chatBox.scrollHeight;
-        userInput.value = "";
+      const botMessage = document.createElement("div");
+      botMessage.textContent = "Thinking...";
+      botMessage.style.margin = "6px 0";
+      chatBox.appendChild(botMessage);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer YOUR_OPENAI_API_KEY"
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+              { role: "system", content: "You are a helpful chatbot answering questions about a hospitality thesis focused on emotional intelligence, leadership, empathy, sensitivity, and work-life balance." },
+              { role: "user", content: question }
+            ]
+          })
+        });
+        const data = await response.json();
+        botMessage.textContent = `ChatBot: ${data.choices[0].message.content.trim()}`;
+      } catch (error) {
+        botMessage.textContent = "ChatBot: Sorry, I couldn't fetch a response right now.";
       }
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+      input.value = "";
     }
-  });
-</script>
+
+    function resetChat() {
+      document.getElementById("chatBox").innerHTML = "";
+    }
+
+    function startVoiceInput() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("userInput").value = transcript;
+        sendMessage();
+      };
+
+      recognition.onerror = function(event) {
+        alert("Voice input failed: " + event.error);
+      };
+    }
+  </script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,25 +79,68 @@
       <button onclick="startVoiceInput()">🎤</button>
       <button onclick="resetChat()">Reset</button>
     </div>
-
     <details style="margin-top: 1rem;">
-      <summary style="cursor: pointer; font-weight: bold;">Click to see example questions</summary>
+      <summary style="cursor: pointer; font-weight: bold;">💡 Click here to see example questions</summary>
       <ul id="exampleQuestions" style="margin-top: 10px; padding-left: 20px; line-height: 1.6;"></ul>
     </details>
   </div>
 
   <script>
-    const qaMap = {
+    const qaPairs = {
+      // Full 50-question and answer set inserted here
       "What is this thesis about?": "This thesis explores how emotional intelligence, sensitivity, and empathy can enhance leadership in the hospitality industry, helping leaders balance professional success with personal responsibilities.",
       "Why did you choose this topic?": "I chose it because of my passion for people-centered leadership and my direct experience in luxury hospitality, where emotional intelligence is vital.",
       "What is the main objective of the thesis?": "To analyze how emotionally intelligent leadership can improve team management and work-life balance in hospitality.",
       "Which industry is the focus of this research?": "The luxury hospitality industry.",
       "What personal experiences inspired this thesis?": "My internships at The Gritti Palace, Hotel Arts Barcelona, and Bvlgari Hotel Roma helped me observe emotionally intelligent leadership in action.",
       "What is emotional intelligence?": "EI is the ability to recognize, understand, manage, and use emotions effectively in oneself and others.",
-      // [... all remaining Q&A inserted here in full ...]
+      "Why is EI important for leaders?": "EI enables leaders to handle interpersonal relationships wisely and empathetically, fostering stronger teams and better performance.",
+      "Who are the key theorists behind EI?": "Daniel Goleman is the most influential, defining EI with five key components: self-awareness, self-regulation, motivation, empathy, and social skills.",
+      "Can emotional intelligence be learned?": "Yes, through self-reflection, feedback, training, and real-life practice.",
+      "How does EI differ from IQ?": "IQ measures cognitive ability; EI measures how we understand and manage emotions.",
+      "What is transformational leadership?": "A style that inspires and motivates employees through vision, empathy, and personal connection.",
+      "What is transactional leadership?": "A style based on structured tasks and rewards or penalties.",
+      "Which style is more people-centered?": "Transformational leadership is more people-centered and emotionally intelligent.",
+      "What is the DISC model?": "A personality framework identifying four styles: Dominance, Influence, Steadiness, and Conscientiousness.",
+      "What is the Big Five model?": "A personality model based on five traits: openness, conscientiousness, extraversion, agreeableness, and neuroticism.",
+      "Why is work-life balance important in hospitality?": "Because the industry is fast-paced and demanding, which can lead to burnout without balance.",
+      "What challenges do leaders face in balancing work and family?": "Long hours, travel, and emotional demands make it hard to maintain personal boundaries.",
+      "Can organizations support work-life balance?": "Yes, through policies like flexible scheduling, supportive culture, and empathetic leadership.",
+      "What role does organizational culture play?": "A culture that values empathy and well-being fosters healthier work-life integration.",
+      "What strategies help leaders maintain balance?": "Time management, delegation, boundary-setting, and emotional intelligence.",
+      "How does HRM relate to leadership?": "HRM supports leadership through talent development, well-being programs, and organizational policies.",
+      "What is Marriott’s 'TakeCare' program?": "A well-being initiative that supports employees physically, emotionally, and socially.",
+      "How did Marriott’s leadership act during COVID-19?": "CEO Arne Sorenson showed empathy and clarity, prioritizing staff and guests despite challenges.",
+      "What are the signs of poor HR practices?": "Low morale, high turnover, stress, and disengagement.",
+      "How can HR promote empathy in leadership?": "Through training, feedback, and by modeling emotionally intelligent behavior.",
+      "How does EI impact team performance?": "EI improves communication, trust, and motivation, leading to better results.",
+      "Is there a link between empathy and productivity?": "Yes, empathy improves relationships and lowers conflict, boosting collaboration and output.",
+      "What is the ROI of emotionally intelligent leadership?": "Increased retention, performance, and employee satisfaction.",
+      "Do emotionally intelligent leaders reduce turnover?": "Yes, because they create supportive environments where people feel valued.",
+      "What kind of results do emotionally intelligent organizations see?": "Greater innovation, loyalty, and sustained performance.",
+      "What is the role of AI in leadership today?": "AI supports decision-making, automates tasks, and provides data-driven insights.",
+      "Can AI show empathy?": "Not real empathy, but it can simulate supportive behavior and personalize communication.",
+      "How can leaders use AI ethically?": "By prioritizing transparency, fairness, and complementing—not replacing—human judgment.",
+      "Is AI a threat to emotional intelligence?": "Not if used wisely—it should augment, not replace, emotionally intelligent leadership.",
+      "What tools can help leaders develop EI?": "Feedback platforms, EI training apps, and reflective coaching tools.",
+      "What is attribution theory?": "It explains how people interpret causes of behavior—useful for emotionally intelligent responses.",
+      "What’s the role of personality in leadership?": "Personality shapes how leaders interact with others and manage stress or empathy.",
+      "What is empathy?": "The ability to understand and share the feelings of others.",
+      "What’s the difference between empathy and sensitivity?": "Sensitivity is awareness of emotions; empathy includes shared emotional understanding.",
+      "Can empathy be a leadership skill?": "Absolutely—empathy fosters trust, motivation, and psychological safety.",
+      "What did you learn at Hotel Arts Barcelona?": "How strong team dynamics and emotional leadership boost guest satisfaction.",
+      "What stood out at The Gritti Palace?": "I observed how leaders empowered staff through trust and empathy.",
+      "How did Bvlgari Roma shape your thinking?": "It helped me see the balance between operational excellence and emotional awareness.",
+      "What was your biggest leadership lesson?": "That leadership is about people first—listening, guiding, and supporting them.",
+      "Did you see poor leadership too?": "Yes—lack of communication and emotional detachment can create fear or frustration.",
+      "How is leadership evolving?": "It's becoming more human-centric, valuing emotional intelligence and flexibility.",
+      "What do younger generations expect from leaders?": "Empathy, transparency, purpose, and well-being support.",
+      "What’s the future of emotionally intelligent leadership?": "It will be essential in attracting talent, managing change, and driving innovation.",
+      "Will emotional intelligence be more valued than IQ?": "In many people-centered roles, yes—it’s becoming equally or more important.",
+      "How can I become an emotionally intelligent leader?": "Start with self-awareness, seek feedback, practice empathy, and never stop learning."
     };
 
-    const exampleQuestions = Object.keys(qaMap);
+    const exampleQuestions = Object.keys(qaPairs);
 
     function sendMessage() {
       const input = document.getElementById("userInput");
@@ -111,17 +155,11 @@
       chatBox.appendChild(userMessage);
 
       const botMessage = document.createElement("div");
-      botMessage.textContent = "Thinking...";
+      const answer = qaPairs[question] || "ChatBot: Sorry, I don't have a predefined answer for that. Please rephrase or ask something else about the thesis.";
+      botMessage.textContent = `ChatBot: ${answer}`;
       botMessage.style.margin = "6px 0";
       chatBox.appendChild(botMessage);
       chatBox.scrollTop = chatBox.scrollHeight;
-
-      setTimeout(() => {
-        const answer = qaMap[question] || "I'm sorry, I don't have a predefined answer for that. Please rephrase or ask something else.";
-        botMessage.textContent = `ChatBot: ${answer}`;
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }, 500);
-
       input.value = "";
     }
 
@@ -162,3 +200,4 @@
   </script>
 </body>
 </html>
+
